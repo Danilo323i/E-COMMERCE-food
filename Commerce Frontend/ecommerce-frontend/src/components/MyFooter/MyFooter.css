@@ -1,0 +1,35 @@
+.footer {
+    background-color: #000000;
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .footerSection {
+    margin-bottom: 15px;
+  }
+  
+  .footerSection h4 {
+    margin-bottom: 10px;
+  }
+  
+  .footerSection ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footerSection ul li {
+    margin-bottom: 5px;
+  }
+  
+  .footerSection ul li a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .footerSection ul li a:hover {
+    text-decoration: underline;
+  }
+  
