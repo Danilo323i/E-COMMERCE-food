@@ -63,7 +63,6 @@ const MyNavbar = ({ placeholder, onChange }) => {
         />
       </div>
 
-      {/* Menu a tendina per il profilo */}
       {isProfileMenuOpen && (
         <div className="dropdownMenu" ref={profileRef}>
           <p>Profilo</p>
@@ -72,7 +71,6 @@ const MyNavbar = ({ placeholder, onChange }) => {
         </div>
       )}
 
-      {/* Menu a tendina per il carrello */}
       {isCartMenuOpen && (
         <div className="dropdownMenu" ref={cartRef}>
           <p>Visualizza Carrello</p>

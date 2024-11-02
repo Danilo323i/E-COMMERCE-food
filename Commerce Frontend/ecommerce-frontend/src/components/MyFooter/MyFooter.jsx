@@ -20,7 +20,6 @@ const Footer = () => {
       <div className="footerSection">
         <h4>Seguici</h4>
         <div className="socialIcons">
-          {/* Aggiungi qui le icone social */}
         </div>
       </div>
     </footer>
