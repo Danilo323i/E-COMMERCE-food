@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 
-const Register = () => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleRegister = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/api/auth/register', {
+      const response = await fetch('http://localhost:3000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -16,17 +16,20 @@ const Register = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setMessage('Registrazione completata. Controlla la tua email per confermare l’account.');
+        setMessage('Accesso effettuato con successo!');
+        localStorage.setItem('token', data.token);
+        // Puoi navigare alla pagina principale o eseguire altre azioni qui
       } else {
-        setMessage(data.message || 'Errore durante la registrazione');
+        setMessage(data.message || 'Errore durante l’accesso');
       }
     } catch (error) {
       setMessage('Errore di connessione al server');
+      console.error('Errore durante il login:', error);
     }
   };
 
   return (
-    <form onSubmit={handleRegister}>
+    <form onSubmit={handleLogin}>
       <input
         type="email"
         placeholder="Email"
@@ -41,10 +44,10 @@ const Register = () => {
         onChange={(e) => setPassword(e.target.value)}
         required
       />
-      <button type="submit">Registrati</button>
+      <button type="submit">Accedi</button>
       {message && <p>{message}</p>}
     </form>
   );
 };
 
-export default Register;
+export default Login;

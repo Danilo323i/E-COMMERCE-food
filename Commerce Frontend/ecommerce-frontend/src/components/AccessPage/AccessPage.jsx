@@ -1,16 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../AccessPage/AccessPage.css';
+import '../AccessPage/AccessPage.css'; 
 
 function AccessPage() {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    navigate('/login');
+    navigate('/login'); 
   };
 
   const handleRegister = () => {
-    navigate('/register');
+    navigate('/register'); 
   };
 
   const handleGuestAccess = () => {

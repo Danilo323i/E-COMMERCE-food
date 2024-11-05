@@ -1,21 +1,16 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
-const authMiddleware = (req, res, next) => {
-  const token = req.headers["authorization"];
-  if (!token) return res.status(401).json({ message: "Accesso non autorizzato" });
+module.exports = function (req, res, next) {
+  const token = req.header('authorization');
+  if (!token) {
+    return res.status(403).send({ message: 'Token non valido o non fornito' });
+  }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = verified;
     next();
-  } catch (error) {
-    res.status(401).json({ message: "Token non valido" });
+  } catch (e) {
+    res.status(403).send({ message: 'Token scaduto o non valido' });
   }
 };
-
-const adminMiddleware = (req, res, next) => {
-  if (req.user.role !== "admin") return res.status(403).json({ message: "Accesso riservato agli amministratori" });
-  next();
-};
-
-module.exports = { authMiddleware, adminMiddleware };

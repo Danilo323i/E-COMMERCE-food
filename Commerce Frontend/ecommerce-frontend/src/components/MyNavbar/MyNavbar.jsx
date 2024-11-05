@@ -6,8 +6,8 @@ const MyNavbar = ({ placeholder, onChange }) => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isCartMenuOpen, setIsCartMenuOpen] = useState(false);
 
-  const profileRef = useRef(null);
-  const cartRef = useRef(null);
+  const profileMenuRef = useRef(null);
+  const cartMenuRef = useRef(null);
 
   const toggleProfileMenu = () => {
     setIsProfileMenuOpen(!isProfileMenuOpen);
@@ -21,10 +21,10 @@ const MyNavbar = ({ placeholder, onChange }) => {
 
   // Funzione per chiudere i menu cliccando fuori
   const handleClickOutside = (event) => {
-    if (profileRef.current && !profileRef.current.contains(event.target)) {
+    if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
       setIsProfileMenuOpen(false);
     }
-    if (cartRef.current && !cartRef.current.contains(event.target)) {
+    if (cartMenuRef.current && !cartMenuRef.current.contains(event.target)) {
       setIsCartMenuOpen(false);
     }
   };
@@ -49,22 +49,16 @@ const MyNavbar = ({ placeholder, onChange }) => {
       </div>
 
       <div className="nav-icons">
-        <IoPersonOutline
-          className={`nav-icon ${isProfileMenuOpen ? "rotateShadow" : ""}`}
-          size={30}
-          onClick={toggleProfileMenu}
-          ref={profileRef}
-        />
-        <IoCartOutline
-          className={`nav-icon ${isCartMenuOpen ? "rotateShadow" : ""}`}
-          size={30}
-          onClick={toggleCartMenu}
-          ref={cartRef}
-        />
+        <div onClick={toggleProfileMenu} className={`nav-icon ${isProfileMenuOpen ? "rotateShadow" : ""}`}>
+          <IoPersonOutline size={30} />
+        </div>
+        <div onClick={toggleCartMenu} className={`nav-icon ${isCartMenuOpen ? "rotateShadow" : ""}`}>
+          <IoCartOutline size={30} />
+        </div>
       </div>
 
       {isProfileMenuOpen && (
-        <div className="dropdownMenu" ref={profileRef}>
+        <div className="dropdownMenu" ref={profileMenuRef}>
           <p>Profilo</p>
           <p>Impostazioni</p>
           <p>Logout</p>
@@ -72,7 +66,7 @@ const MyNavbar = ({ placeholder, onChange }) => {
       )}
 
       {isCartMenuOpen && (
-        <div className="dropdownMenu" ref={cartRef}>
+        <div className="dropdownMenu" ref={cartMenuRef}>
           <p>Visualizza Carrello</p>
           <p>Checkout</p>
         </div>
