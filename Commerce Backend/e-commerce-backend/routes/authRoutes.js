@@ -1,31 +1,25 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../AccessPage/AccessPage.css';
+const express = require('express');
+const router = express.Router();
 
-function AccessPage() {
-  const navigate = useNavigate();
+// Esempio di middleware per la gestione dell'autenticazione
+const { loginUser, registerUser, verifyToken } = require('../controllers/authController');
 
-  const handleLogin = () => {
-    navigate('/login');
-  };
+// Route per il login
+router.post('/login', (req, res) => {
+    // Logica per il login (assicurati che `loginUser` sia implementata nel tuo controller)
+    loginUser(req, res);
+});
 
-  const handleRegister = () => {
-    navigate('/register');
-  };
+// Route per la registrazione
+router.post('/register', (req, res) => {
+    // Logica per la registrazione (assicurati che `registerUser` sia implementata nel tuo controller)
+    registerUser(req, res);
+});
 
-  const handleGuestAccess = () => {
-    navigate('/products');
-  };
+// Route per la verifica del token (opzionale)
+router.get('/verify', (req, res) => {
+    // Logica per la verifica del token (assicurati che `verifyToken` sia implementata nel tuo controller)
+    verifyToken(req, res);
+});
 
-  return (
-    <div className="accessPageContainer">
-      <h1>Benvenuto!</h1>
-      <p>Scegli un'opzione per continuare:</p>
-      <button onClick={handleLogin}>Accedi</button>
-      <button onClick={handleRegister}>Registrati</button>
-      <button onClick={handleGuestAccess}>Entra come Ospite</button>
-    </div>
-  );
-}
-
-export default AccessPage;
+module.exports = router;

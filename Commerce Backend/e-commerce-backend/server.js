@@ -1,42 +1,43 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const authRoutes = require('./routes/authRoutes');
+const cors = require('cors');
+const productRoutes = require('../e-commerce-backend/routes/productRoutes');
 
+// Configurazione ambiente
+dotenv.config();
+
+// Creazione dell'app Express
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
-app.use(cors({
-  origin: 'http://localhost:5173', // Consente solo richieste da questa origine
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // Consente l'invio di cookie e credenziali
-}));
+// Middleware
+app.use(express.json()); // Per gestire i body delle richieste JSON
+app.use(cors()); // Per abilitare richieste cross-origin
+app.use((req, res, next) => {
+  console.log(`Request received: ${req.method} ${req.url}`);
+  next();
+});
+app.use('/api', productRoutes);
 
-
-// Connessione a MongoDB
-mongoose
-  .connect(process.env.MONGO_URI, {
+// Connessione al database MongoDB
+mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-  })
-  .then(() => console.log("Connesso a MongoDB"))
-  .catch((error) => console.error("Errore di connessione:", error));
+})
+.then(() => console.log('Connesso al database MongoDB'))
+.catch((err) => console.error('Errore di connessione al database:', err));
 
-// Importa le rotte
-const authRoutes = require("./routes/authRoutes");
-const productRoutes = require("./routes/productRoutes");
+// Utilizzo delle route
+app.use('/auth', authRoutes);
 
-// Usa le rotte
-app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
-
-// Rotta principale
-app.get("/", (req, res) => {
-  res.send("Server funzionante!");
+// Route di base per controllare il funzionamento del server
+app.get('/', (req, res) => {
+    res.send('Benvenuto nel backend dell\'e-commerce!');
 });
 
-// Avvia il server
+// Avvio del server
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server avviato su http://localhost:${PORT}`);
+    console.log(`Server in esecuzione sulla porta ${PORT}`);
 });
