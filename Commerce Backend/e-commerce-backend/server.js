@@ -11,32 +11,32 @@ const notFound = require('./middlewares/routeNotFound');
 
 dotenv.config();
 
-// Creazione dell'app Express
 const app = express();
+app.use(cors());
+app.use(express.json());
 
 // Middleware
-app.use(express.json()); // Per gestire i body delle richieste JSON
-app.use(cors()); // Per abilitare richieste cross-origin
-app.use(logger); // Middleware di logging
+app.use(logger);
 
-// Utilizzo delle route
+// Routes
 app.use('/auth', authRoutes);
 app.use('/api', productRoutes);
 
-// Route di base per controllare il funzionamento del server
-app.get('/', (req, res) => {
-    res.send('Benvenuto nel backend dell\'e-commerce!');
-});
-
-// Middleware per gestire le route non trovate
-app.use(notFound);
-
-// Middleware per la gestione degli errori
+// Error handlers
 app.use(badRequestHandler);
 app.use(genericErrorHandler);
+app.use(notFound);
 
-// Avvio del server
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log('Connected to MongoDB');
+    })
+    .catch((error) => {
+        console.error('Error connecting to MongoDB:', error.message);
+    });
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server in esecuzione sulla porta ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });

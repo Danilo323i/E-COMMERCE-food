@@ -5,7 +5,6 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-  
     fetch('http://localhost:3000/api/products')
       .then(response => {
         if (!response.ok) {
