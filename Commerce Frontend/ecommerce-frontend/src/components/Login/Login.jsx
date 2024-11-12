@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState(''); // Può essere `email` o `username`
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
@@ -11,30 +11,28 @@ const Login = () => {
       const response = await fetch('http://localhost:3000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: identifier, password }), // Usa `email` come campo generico
       });
 
       const data = await response.json();
       if (response.ok) {
-        setMessage('Accesso effettuato con successo!');
-        localStorage.setItem('token', data.token);
-        // Puoi navigare alla pagina principale o eseguire altre azioni qui
+        setMessage('Login successful!');
       } else {
-        setMessage(data.message || 'Errore durante l’accesso');
+        setMessage(data.message || 'Login failed');
       }
     } catch (error) {
-      setMessage('Errore di connessione al server');
-      console.error('Errore durante il login:', error);
+      console.error('Error:', error);
+      setMessage('An error occurred');
     }
   };
 
   return (
     <form onSubmit={handleLogin}>
       <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        type="text"
+        placeholder="Email or Username"
+        value={identifier}
+        onChange={(e) => setIdentifier(e.target.value)}
         required
       />
       <input
@@ -44,7 +42,7 @@ const Login = () => {
         onChange={(e) => setPassword(e.target.value)}
         required
       />
-      <button type="submit">Accedi</button>
+      <button type="submit">Login</button>
       {message && <p>{message}</p>}
     </form>
   );

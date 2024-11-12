@@ -1,20 +1,27 @@
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const SibApiV3Sdk = require('@sendinblue/client');
 
-const sendVerificationEmail = (email, token) => {
-  const verificationLink = `http://localhost:3000/api/auth/verify?token=${token}`;
-  const msg = {
-    to: email,
-    from: process.env.SENDGRID_SENDER, // Assicurati che questa sia configurata nel tuo .env
-    subject: 'Verifica il tuo account',
-    text: `Clicca sul link per verificare il tuo account: ${verificationLink}`
-  };
+// Configura la chiave API direttamente durante la creazione dell'istanza
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+const apiKey = process.env.BREVO_API_KEY;
 
-  sgMail.send(msg).then(() => {
-    console.log('Email inviata con successo');
-  }).catch((error) => {
-    console.error('Errore nell\'invio dell\'email:', error);
-  });
+// Funzione per inviare l'email
+const sendEmail = async (to, subject, htmlContent) => {
+    try {
+        const sendSmtpEmail = {
+            sender: { email: process.env.BREVO_SENDER },
+            to: [{ email: to }],
+            subject,
+            htmlContent,
+        };
+        
+        // Imposta la chiave API nel momento della chiamata
+        apiInstance.apiClient.authentications['api-key'].apiKey = apiKey;
+        
+        await apiInstance.sendTransacEmail(sendSmtpEmail);
+        console.log(`Email inviata a ${to}`);
+    } catch (error) {
+        console.error("Errore nell'invio dell'email:", error);
+    }
 };
 
-module.exports = sendVerificationEmail;
+module.exports = { sendEmail };

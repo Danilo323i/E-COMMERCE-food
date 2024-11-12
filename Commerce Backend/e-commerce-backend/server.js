@@ -12,29 +12,33 @@ const notFound = require('./middlewares/routeNotFound');
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+// Configurazione CORS
+app.use(cors({
+    origin: 'http://localhost:5173', // Permette le richieste dal frontend su questa origine
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: ['Content-Type'],
+    credentials: true
+}));
+
 app.use(express.json());
 
 // Middleware
 app.use(logger);
 
-// Routes
-app.use('/auth', authRoutes);
+// Rotte
+app.use('/api/auth', authRoutes);
 app.use('/api', productRoutes);
 
-// Error handlers
+// Gestione degli errori
 app.use(badRequestHandler);
 app.use(genericErrorHandler);
 app.use(notFound);
 
-// Connect to MongoDB
+// Connessione a MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-        console.log('Connected to MongoDB');
-    })
-    .catch((error) => {
-        console.error('Error connecting to MongoDB:', error.message);
-    });
+    .then(() => console.log('Connected to MongoDB'))
+    .catch((error) => console.error('MongoDB connection error:', error));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

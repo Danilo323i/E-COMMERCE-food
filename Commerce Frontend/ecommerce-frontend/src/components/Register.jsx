@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 const Register = () => {
+  const [username, setUsername] = useState(''); // Aggiunto username
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -11,22 +12,30 @@ const Register = () => {
       const response = await fetch('http://localhost:3000/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, email, password }), // Aggiunto username
       });
-
+      
       const data = await response.json();
       if (response.ok) {
-        setMessage('Registrazione completata. Controlla la tua email per confermare l’account.');
+        setMessage('Registration successful!');
       } else {
-        setMessage(data.message || 'Errore durante la registrazione');
+        setMessage(data.message || 'Registration failed');
       }
     } catch (error) {
-      setMessage('Errore di connessione al server');
+      console.error('Error:', error);
+      setMessage('An error occurred');
     }
   };
 
   return (
     <form onSubmit={handleRegister}>
+      <input
+        type="text"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        required
+      />
       <input
         type="email"
         placeholder="Email"
@@ -41,7 +50,7 @@ const Register = () => {
         onChange={(e) => setPassword(e.target.value)}
         required
       />
-      <button type="submit">Registrati</button>
+      <button type="submit">Register</button>
       {message && <p>{message}</p>}
     </form>
   );
