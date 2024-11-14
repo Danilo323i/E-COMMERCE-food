@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
-const productRoutes = require('./routes/productRoutes');
+const productRoutes = require('./routes/productRoutes'); 
 const badRequestHandler = require('./middlewares/badRequestHandler');
 const genericErrorHandler = require('./middlewares/genericErrorHandler');
 const logger = require('./middlewares/logger');
@@ -15,7 +15,7 @@ const app = express();
 
 // Configurazione CORS
 app.use(cors({
-    origin: 'http://localhost:5173', // Permette le richieste dal frontend su questa origine
+    origin: 'http://localhost:5173',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: ['Content-Type'],
     credentials: true
